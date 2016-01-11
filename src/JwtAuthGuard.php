@@ -63,7 +63,8 @@ class JwtAuthGuard implements Guard
     /**
      * Log a user into the application without sessions or cookies.
      *
-     * @param  array  $credentials
+     * @param  array $credentials
+     *
      * @return bool
      */
     public function once(array $credentials = [])
@@ -80,7 +81,8 @@ class JwtAuthGuard implements Guard
     /**
      * Validate a user's credentials.
      *
-     * @param  array  $credentials
+     * @param  array $credentials
+     *
      * @return bool
      */
     public function validate(array $credentials = [])
