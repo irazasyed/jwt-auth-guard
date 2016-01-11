@@ -10,7 +10,7 @@
 
 ## Requirements
 - Laravel or Lumen Installation.
-- [tymon/jwt-auth](https://github.com/tymon/jwt-auth) Package Setup and Config'd.
+- [tymon/jwt-auth](https://github.com/tymondesigns/jwt-auth) Package Setup and Config'd.
 
 ## Install
 
