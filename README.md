@@ -20,13 +20,24 @@ Via Composer
 $ composer require irazasyed/jwt-auth-guard
 ```
 
-#### Add the Service Provider
+### Add the Service Provider
+
+#### Laravel
 
 Open `config/app.php` and, to your `providers` array at the bottom, add:
 
 ```php
-Irazasyed\JwtAuthGuard\Providers\JwtAuthGuardServiceProvider::class
+Irazasyed\JwtAuthGuard\JwtAuthGuardServiceProvider::class
 ```
+
+#### Lumen
+
+Open `bootstrap/app.php` and register the service provider:
+
+``` php
+$app->register(Irazasyed\JwtAuthGuard\JwtAuthGuardServiceProvider::class);
+```
+
 ## Usage
 
 Open your `config/auth.php` config file and in place of driver under any of your guards, just add the `jwt` as your driver and you're all set.
@@ -130,6 +141,12 @@ if(Auth::check()) {
 if(Auth::guest()) {
     // Welcome guests!
 }
+```
+
+### Logout Authenticated User
+
+``` php
+Auth::logout(); // This will invalidate the current token and unset user/token values.
 ```
 
 ### Generate JWT Auth Token By ID
