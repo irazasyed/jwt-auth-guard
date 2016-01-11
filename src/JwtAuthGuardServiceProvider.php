@@ -1,6 +1,6 @@
 <?php
 
-namespace Irazasyed\JwtAuthGuard\Providers;
+namespace Irazasyed\JwtAuthGuard;
 
 use Irazasyed\JwtAuthGuard\JwtAuthGuard;
 use Illuminate\Support\ServiceProvider;
@@ -25,7 +25,14 @@ class JwtAuthGuardServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->app['auth']->extend('jwt', function ($app, $name, array $config) {
-            return new JwtAuthGuard($app['auth']->createUserProvider($config['provider']));
+            $guard = new JwtAuthGuard(
+                $app['auth']->createUserProvider($config['provider']),
+                $app['request']
+            );
+
+            $app->refresh('request', $guard, 'setRequest');
+
+            return $guard;
         });
     }
 }

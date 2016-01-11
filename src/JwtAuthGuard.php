@@ -2,10 +2,12 @@
 
 namespace Irazasyed\JwtAuthGuard;
 
+use Illuminate\Http\Request;
 use Illuminate\Auth\GuardHelpers;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\UserProvider;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class JwtAuthGuard implements Guard
 {
@@ -24,13 +26,21 @@ class JwtAuthGuard implements Guard
     protected $lastAttempted;
 
     /**
+     * The request instance.
+     *
+     * @var \Illuminate\Http\Request
+     */
+    protected $request;
+
+    /**
      * Create a new authentication guard.
      *
      * @param  \Illuminate\Contracts\Auth\UserProvider $provider
      */
-    public function __construct(UserProvider $provider)
+    public function __construct(UserProvider $provider, Request $request)
     {
         $this->provider = $provider;
+        $this->request = $request;
     }
 
     /**
@@ -137,6 +147,20 @@ class JwtAuthGuard implements Guard
     }
 
     /**
+     * Logout the user.
+     *
+     * @param bool $forceForever
+     *
+     * @return bool
+     */
+    public function logout($forceForever = true)
+    {
+        $this->user = null;
+        $this->invalidate($forceForever);
+        JWTAuth::unsetToken();
+    }
+
+    /**
      * Generate new token by ID.
      *
      * @param  mixed $id
@@ -184,6 +208,8 @@ class JwtAuthGuard implements Guard
     protected function parseToken()
     {
         if (is_null($this->token)) {
+            $this->checkForToken();
+
             JWTAuth::parseToken();
         }
     }
@@ -277,5 +303,31 @@ class JwtAuthGuard implements Guard
     public function setProvider(UserProvider $provider)
     {
         $this->provider = $provider;
+    }
+
+    /**
+     * Check the request for the presence of a token
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
+     */
+    public function checkForToken()
+    {
+        if (!JWTAuth::parser()->setRequest($this->request)->hasToken()) {
+            throw new BadRequestHttpException('Token not provided');
+        }
+    }
+
+    /**
+     * Set the current request instance.
+     *
+     * @param  \Illuminate\Http\Request $request
+     *
+     * @return $this
+     */
+    public function setRequest(Request $request)
+    {
+        $this->request = $request;
+
+        return $this;
     }
 }
