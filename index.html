@@ -1,0 +1,291 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Jwt-auth-guard by irazasyed</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <meta name="viewport" content="width=device-width">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Jwt-auth-guard</h1>
+        <p>JWT Auth Guard for Laravel and Lumen Frameworks.</p>
+
+        <p class="view"><a href="https://github.com/irazasyed/jwt-auth-guard">View the Project on GitHub <small>irazasyed/jwt-auth-guard</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/irazasyed/jwt-auth-guard/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/irazasyed/jwt-auth-guard/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/irazasyed/jwt-auth-guard">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a id="jwt-auth-guard" class="anchor" href="#jwt-auth-guard" aria-hidden="true"><span class="octicon octicon-link"></span></a>JWT Auth Guard</h1>
+
+<p><a href="https://packagist.org/packages/irazasyed/jwt-auth-guard"><img src="https://img.shields.io/packagist/v/irazasyed/jwt-auth-guard.svg?style=flat-square" alt="Latest Version on Packagist"></a>
+<a href="LICENSE.md"><img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square" alt="Software License"></a>
+<a href="https://packagist.org/packages/irazasyed/jwt-auth-guard"><img src="https://img.shields.io/packagist/dt/irazasyed/jwt-auth-guard.svg?style=flat-square" alt="Total Downloads"></a></p>
+
+<blockquote>
+<p>JWT Auth Guard is a Laravel &amp; Lumen Package that lets you use <code>jwt</code> as your driver for authentication guard in your application.</p>
+
+<p>The Guard uses <code>tymon/jwt-auth</code> package for authentication and token handling.</p>
+</blockquote>
+
+<h2>
+<a id="requirements" class="anchor" href="#requirements" aria-hidden="true"><span class="octicon octicon-link"></span></a>Requirements</h2>
+
+<ul>
+<li>Laravel or Lumen Installation.</li>
+<li>
+<a href="https://github.com/tymondesigns/jwt-auth">tymon/jwt-auth</a> Package Setup and Config'd.</li>
+</ul>
+
+<h2>
+<a id="install" class="anchor" href="#install" aria-hidden="true"><span class="octicon octicon-link"></span></a>Install</h2>
+
+<p>Via Composer</p>
+
+<div class="highlight highlight-source-shell"><pre>$ composer require irazasyed/jwt-auth-guard</pre></div>
+
+<h3>
+<a id="add-the-service-provider" class="anchor" href="#add-the-service-provider" aria-hidden="true"><span class="octicon octicon-link"></span></a>Add the Service Provider</h3>
+
+<h4>
+<a id="laravel" class="anchor" href="#laravel" aria-hidden="true"><span class="octicon octicon-link"></span></a>Laravel</h4>
+
+<p>Open <code>config/app.php</code> and, to your <code>providers</code> array at the bottom, add:</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-c1">Irazasyed\JwtAuthGuard\</span><span class="pl-c1">JwtAuthGuardServiceProvider</span><span class="pl-k">::</span><span class="pl-c1">class</span></span></pre></div>
+
+<h4>
+<a id="lumen" class="anchor" href="#lumen" aria-hidden="true"><span class="octicon octicon-link"></span></a>Lumen</h4>
+
+<p>Open <code>bootstrap/app.php</code> and register the service provider:</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$app</span><span class="pl-k">-&gt;</span>register(<span class="pl-c1">Irazasyed\JwtAuthGuard\</span><span class="pl-c1">JwtAuthGuardServiceProvider</span><span class="pl-k">::</span><span class="pl-c1">class</span>);</span></pre></div>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>Open your <code>config/auth.php</code> config file and in place of driver under any of your guards, just add the <code>jwt</code> as your driver and you're all set.
+Make sure you also set <code>provider</code> for the guard to communicate with your database.</p>
+
+<h3>
+<a id="setup-guard-driver" class="anchor" href="#setup-guard-driver" aria-hidden="true"><span class="octicon octicon-link"></span></a>Setup Guard Driver</h3>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-c">// config/auth.php</span></span>
+<span class="pl-s1"><span class="pl-s"><span class="pl-pds">'</span>guards<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> [</span>
+<span class="pl-s1">    <span class="pl-s"><span class="pl-pds">'</span>api<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> [</span>
+<span class="pl-s1">        <span class="pl-s"><span class="pl-pds">'</span>driver<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>jwt<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">        <span class="pl-s"><span class="pl-pds">'</span>provider<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>users<span class="pl-pds">'</span></span></span>
+<span class="pl-s1">    ],</span>
+<span class="pl-s1"></span>
+<span class="pl-s1">    <span class="pl-c">// ...</span></span>
+<span class="pl-s1">],</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-s"><span class="pl-pds">'</span>providers<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> [</span>
+<span class="pl-s1">    <span class="pl-s"><span class="pl-pds">'</span>users<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> [</span>
+<span class="pl-s1">        <span class="pl-s"><span class="pl-pds">'</span>driver<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>eloquent<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s1">        <span class="pl-s"><span class="pl-pds">'</span>model<span class="pl-pds">'</span></span>  <span class="pl-k">=&gt;</span> <span class="pl-c1">App\</span><span class="pl-c1">User</span><span class="pl-k">::</span><span class="pl-c1">class</span>,</span>
+<span class="pl-s1">    ],</span>
+<span class="pl-s1">],</span></pre></div>
+
+<h3>
+<a id="middleware-usage" class="anchor" href="#middleware-usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Middleware Usage</h3>
+
+<p>Middleware protecting the route:</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-c1">Route</span><span class="pl-k">::</span>get(<span class="pl-s"><span class="pl-pds">'</span>api/content<span class="pl-pds">'</span></span>, [<span class="pl-s"><span class="pl-pds">'</span>middleware<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>auth:api<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>uses<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>ContentController@content<span class="pl-pds">'</span></span>]);</span></pre></div>
+
+<p>Middleware protecting the controller:</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-pse">&lt;?php</span><span class="pl-s1"></span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-k">namespace</span> <span class="pl-en">App\Http\Controllers</span>;</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-k">class</span> <span class="pl-en">ContentController</span> <span class="pl-k">extends</span> <span class="pl-e">Controller</span></span>
+<span class="pl-s1">{</span>
+<span class="pl-s1">    <span class="pl-k">public</span> <span class="pl-k">function</span> <span class="pl-c1">__construct</span>() </span>
+<span class="pl-s1">    {</span>
+<span class="pl-s1">        <span class="pl-smi">$this</span><span class="pl-k">-&gt;</span>middleware(<span class="pl-s"><span class="pl-pds">'</span>auth:api<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s1">    }</span>
+<span class="pl-s1">}</span></pre></div>
+
+<p><strong>Note:</strong> The above example assumes you've setup a guard with the name <code>api</code> whose driver is <code>jwt</code> in your <code>config/auth.php</code> file as explained in "Setup Guard Driver" section above.</p>
+
+<blockquote>
+<p>The following usage examples assume you've setup your default auth guard to the one which uses the <code>jwt</code> driver.</p>
+
+<p>You can also explicitly define the guard before making calls to any of methods by just prefixing it with <code>Auth::guard('api')</code>. </p>
+
+<p>Example: <code>Auth::guard('api')-&gt;user()</code></p>
+</blockquote>
+
+<h3>
+<a id="attempt-to-authenticate-and-return-token" class="anchor" href="#attempt-to-authenticate-and-return-token" aria-hidden="true"><span class="octicon octicon-link"></span></a>Attempt To Authenticate And Return Token</h3>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-c">// This will attempt to authenticate the user using the credentials passed and returns a JWT Auth Token for subsequent requests.</span></span>
+<span class="pl-s1"><span class="pl-smi">$token</span> <span class="pl-k">=</span> <span class="pl-c1">Auth</span><span class="pl-k">::</span>attempt([<span class="pl-s"><span class="pl-pds">'</span>email<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>user@domain.com<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>password<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>123456<span class="pl-pds">'</span></span>]);</span></pre></div>
+
+<h3>
+<a id="authenticate-once-by-id" class="anchor" href="#authenticate-once-by-id" aria-hidden="true"><span class="octicon octicon-link"></span></a>Authenticate Once By ID</h3>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-k">if</span>(<span class="pl-c1">Auth</span><span class="pl-k">::</span>onceUsingId(<span class="pl-c1">1</span>)) {</span>
+<span class="pl-s1">    <span class="pl-c">// Do something with the authenticated user</span></span>
+<span class="pl-s1">}</span></pre></div>
+
+<h3>
+<a id="authenticate-once-by-credentials" class="anchor" href="#authenticate-once-by-credentials" aria-hidden="true"><span class="octicon octicon-link"></span></a>Authenticate Once By Credentials</h3>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-k">if</span>(<span class="pl-c1">Auth</span><span class="pl-k">::</span>once([<span class="pl-s"><span class="pl-pds">'</span>email<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>user@domain.com<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>password<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>123456<span class="pl-pds">'</span></span>])) {</span>
+<span class="pl-s1">    <span class="pl-c">// Do something with the authenticated user</span></span>
+<span class="pl-s1">}</span></pre></div>
+
+<h3>
+<a id="validate-credentials" class="anchor" href="#validate-credentials" aria-hidden="true"><span class="octicon octicon-link"></span></a>Validate Credentials</h3>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-k">if</span>(<span class="pl-c1">Auth</span><span class="pl-k">::</span>validate([<span class="pl-s"><span class="pl-pds">'</span>email<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>user@domain.com<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>password<span class="pl-pds">'</span></span> <span class="pl-k">=&gt;</span> <span class="pl-s"><span class="pl-pds">'</span>123456<span class="pl-pds">'</span></span>])) {</span>
+<span class="pl-s1">    <span class="pl-c">// Credentials are valid</span></span>
+<span class="pl-s1">}</span></pre></div>
+
+<h3>
+<a id="check-user-is-authenticated" class="anchor" href="#check-user-is-authenticated" aria-hidden="true"><span class="octicon octicon-link"></span></a>Check User is Authenticated</h3>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-k">if</span>(<span class="pl-c1">Auth</span><span class="pl-k">::</span>check()) {</span>
+<span class="pl-s1">    <span class="pl-c">// User is authenticated</span></span>
+<span class="pl-s1">}</span></pre></div>
+
+<h3>
+<a id="check-user-is-a-guest" class="anchor" href="#check-user-is-a-guest" aria-hidden="true"><span class="octicon octicon-link"></span></a>Check User is a Guest</h3>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-k">if</span>(<span class="pl-c1">Auth</span><span class="pl-k">::</span>guest()) {</span>
+<span class="pl-s1">    <span class="pl-c">// Welcome guests!</span></span>
+<span class="pl-s1">}</span></pre></div>
+
+<h3>
+<a id="logout-authenticated-user" class="anchor" href="#logout-authenticated-user" aria-hidden="true"><span class="octicon octicon-link"></span></a>Logout Authenticated User</h3>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-c1">Auth</span><span class="pl-k">::</span>logout(); <span class="pl-c">// This will invalidate the current token and unset user/token values.</span></span></pre></div>
+
+<h3>
+<a id="generate-jwt-auth-token-by-id" class="anchor" href="#generate-jwt-auth-token-by-id" aria-hidden="true"><span class="octicon octicon-link"></span></a>Generate JWT Auth Token By ID</h3>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$token</span> <span class="pl-k">=</span> <span class="pl-c1">Auth</span><span class="pl-k">::</span>generateTokenById(<span class="pl-c1">1</span>);</span>
+<span class="pl-s1"></span>
+<span class="pl-s1"><span class="pl-c1">echo</span> <span class="pl-smi">$token</span>;</span></pre></div>
+
+<h3>
+<a id="get-authenticated-user" class="anchor" href="#get-authenticated-user" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get Authenticated User</h3>
+
+<p>Once the user is authenticated via a middleware, You can access its details by doing:</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$user</span> <span class="pl-k">=</span> <span class="pl-c1">Auth</span><span class="pl-k">::</span>user();</span></pre></div>
+
+<p>You can also manually access user info using the token itself:</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$user</span> <span class="pl-k">=</span> <span class="pl-c1">Auth</span><span class="pl-k">::</span>setToken(<span class="pl-s"><span class="pl-pds">'</span>YourJWTAuthToken<span class="pl-pds">'</span></span>)<span class="pl-k">-&gt;</span>user();</span></pre></div>
+
+<h3>
+<a id="get-authenticated-users-id" class="anchor" href="#get-authenticated-users-id" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get Authenticated User's ID</h3>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$userId</span> <span class="pl-k">=</span> <span class="pl-c1">Auth</span><span class="pl-k">::</span>id();</span></pre></div>
+
+<h3>
+<a id="refresh-expired-token" class="anchor" href="#refresh-expired-token" aria-hidden="true"><span class="octicon octicon-link"></span></a>Refresh Expired Token</h3>
+
+<p>Though it's recommended you refresh using the middlewares provided with the package,
+but if you'd like, You can also do it manually with this method.</p>
+
+<p>Refresh expired token passed in request:</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$token</span> <span class="pl-k">=</span> <span class="pl-c1">Auth</span><span class="pl-k">::</span>refresh();</span></pre></div>
+
+<p>Refresh passed expired token:</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-c1">Auth</span><span class="pl-k">::</span>setToken(<span class="pl-s"><span class="pl-pds">'</span>ExpiredToken<span class="pl-pds">'</span></span>)<span class="pl-k">-&gt;</span>refresh();</span></pre></div>
+
+<h3>
+<a id="invalidate-token" class="anchor" href="#invalidate-token" aria-hidden="true"><span class="octicon octicon-link"></span></a>Invalidate Token</h3>
+
+<p>Invalidate token passed in request:</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$forceForever</span> <span class="pl-k">=</span> <span class="pl-c1">false</span>;</span>
+<span class="pl-s1"><span class="pl-c1">Auth</span><span class="pl-k">::</span>invalidate(<span class="pl-smi">$forceForever</span>);</span></pre></div>
+
+<p>Invalidate token by setting one manually:</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$forceForever</span> <span class="pl-k">=</span> <span class="pl-c1">false</span>;</span>
+<span class="pl-s1"><span class="pl-c1">Auth</span><span class="pl-k">::</span>setToken(<span class="pl-s"><span class="pl-pds">'</span>TokenToInvalidate<span class="pl-pds">'</span></span>)<span class="pl-k">-&gt;</span>invalidate(<span class="pl-smi">$forceForever</span>);</span></pre></div>
+
+<h3>
+<a id="get-token" class="anchor" href="#get-token" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get Token</h3>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$token</span> <span class="pl-k">=</span> <span class="pl-c1">Auth</span><span class="pl-k">::</span>getToken(); <span class="pl-c">// Returns current token passed in request.</span></span></pre></div>
+
+<h3>
+<a id="get-token-payload" class="anchor" href="#get-token-payload" aria-hidden="true"><span class="octicon octicon-link"></span></a>Get Token Payload</h3>
+
+<p>This method will decode the token and return its raw payload.</p>
+
+<p>Get Payload for the token passed in request:</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$payload</span> <span class="pl-k">=</span> <span class="pl-c1">Auth</span><span class="pl-k">::</span>getPayload();</span></pre></div>
+
+<p>Get Payload for the given token manually:</p>
+
+<div class="highlight highlight-text-html-php"><pre><span class="pl-s1"><span class="pl-smi">$payload</span> <span class="pl-k">=</span> <span class="pl-c1">Auth</span><span class="pl-k">::</span>setToken(<span class="pl-s"><span class="pl-pds">'</span>TokenToGetPayload<span class="pl-pds">'</span></span>)<span class="pl-k">-&gt;</span>getPayload();</span></pre></div>
+
+<h2>
+<a id="change-log" class="anchor" href="#change-log" aria-hidden="true"><span class="octicon octicon-link"></span></a>Change log</h2>
+
+<p>Please see <a href="CHANGELOG.md">CHANGELOG</a> for more information what has changed recently.</p>
+
+<h2>
+<a id="testing" class="anchor" href="#testing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Testing</h2>
+
+<div class="highlight highlight-source-shell"><pre>$ composer <span class="pl-c1">test</span></pre></div>
+
+<h2>
+<a id="contributing" class="anchor" href="#contributing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contributing</h2>
+
+<p>Please see <a href="CONTRIBUTING.md">CONTRIBUTING</a> and <a href="CONDUCT.md">CONDUCT</a> for details.</p>
+
+<p>Any issues, feedback, suggestions or questions please use issue tracker <a href="https://github.com/irazasyed/jwt-auth-guard/issues">here</a>.</p>
+
+<h2>
+<a id="security" class="anchor" href="#security" aria-hidden="true"><span class="octicon octicon-link"></span></a>Security</h2>
+
+<p>If you discover any security related issues, please email <a href="mailto:syed+gh@lukonet.com">syed+gh@lukonet.com</a> instead of using the issue tracker.</p>
+
+<h2>
+<a id="credits" class="anchor" href="#credits" aria-hidden="true"><span class="octicon octicon-link"></span></a>Credits</h2>
+
+<ul>
+<li><a href="https://github.com/irazasyed">Syed Irfaq R.</a></li>
+<li><a href="../../contributors">All Contributors</a></li>
+</ul>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p>The MIT License (MIT). Please see <a href="LICENSE.md">License File</a> for more information.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/irazasyed">irazasyed</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
