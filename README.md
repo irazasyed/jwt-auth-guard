@@ -40,7 +40,7 @@ $app->register(Irazasyed\JwtAuthGuard\JwtAuthGuardServiceProvider::class);
 
 ## Usage
 
-Open your `config/auth.php` config file and in place of driver under any of your guards, just add the `jwt` as your driver and you're all set.
+Open your `config/auth.php` config file and in place of driver under any of your guards, just add the `jwt-auth` as your driver and you're all set.
 Make sure you also set `provider` for the guard to communicate with your database.
 
 ### Setup Guard Driver
@@ -49,7 +49,7 @@ Make sure you also set `provider` for the guard to communicate with your databas
 // config/auth.php
 'guards' => [
     'api' => [
-        'driver' => 'jwt',
+        'driver' => 'jwt-auth',
         'provider' => 'users'
     ],
     
@@ -88,9 +88,9 @@ class ContentController extends Controller
 }
 ```
 
-**Note:** The above example assumes you've setup a guard with the name `api` whose driver is `jwt` in your `config/auth.php` file as explained in "Setup Guard Driver" section above.
+**Note:** The above example assumes you've setup a guard with the name `api` whose driver is `jwt-auth` in your `config/auth.php` file as explained in "Setup Guard Driver" section above.
 
-> The following usage examples assume you've setup your default auth guard to the one which uses the `jwt` driver.
+> The following usage examples assume you've setup your default auth guard to the one which uses the `jwt-auth` driver.
 >
 > You can also explicitly define the guard before making calls to any of methods by just prefixing it with `Auth::guard('api')`. 
 >
