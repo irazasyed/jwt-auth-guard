@@ -2,9 +2,9 @@
 
 namespace Irazasyed\JwtAuthGuard;
 
+use Tymon\JWTAuth\JWT;
 use Illuminate\Http\Request;
 use Illuminate\Auth\GuardHelpers;
-use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\UserProvider;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -14,16 +14,18 @@ class JwtAuthGuard implements Guard
     use GuardHelpers;
 
     /**
-     * @var string
-     */
-    protected $token = null;
-
-    /**
      * The user we last attempted to retrieve.
      *
      * @var \Illuminate\Contracts\Auth\Authenticatable
      */
     protected $lastAttempted;
+
+    /**
+     * The JWT instance.
+     *
+     * @var \Tymon\JWTAuth\JWT
+     */
+    protected $jwt;
 
     /**
      * The request instance.
@@ -35,10 +37,13 @@ class JwtAuthGuard implements Guard
     /**
      * Create a new authentication guard.
      *
+     * @param JWT                                      $jwt
      * @param  \Illuminate\Contracts\Auth\UserProvider $provider
+     * @param \Illuminate\Http\Request                 $request
      */
-    public function __construct(UserProvider $provider, Request $request)
+    public function __construct(JWT $jwt, UserProvider $provider, Request $request)
     {
+        $this->jwt = $jwt;
         $this->provider = $provider;
         $this->request = $request;
     }
@@ -50,22 +55,15 @@ class JwtAuthGuard implements Guard
      */
     public function user()
     {
-        // If we've already retrieved the user for the current request we can just
-        // return it back immediately. We do not want to fetch the user data on
-        // every call to this method because that would be tremendously slow.
         if (!is_null($this->user)) {
             return $this->user;
         }
 
-        $user = null;
-
-        $this->parseToken();
-
-        if (!JWTAuth::check()) {
+        if (!$this->requireToken()->check()) {
             return null;
         }
 
-        $id = JWTAuth::getPayload()->get('sub');
+        $id = $this->jwt->getPayload()->get('sub');
 
         return $this->user = $this->provider->retrieveById($id);
     }
@@ -112,14 +110,11 @@ class JwtAuthGuard implements Guard
     {
         $this->lastAttempted = $user = $this->provider->retrieveByCredentials($credentials);
 
-        // If an implementation of UserInterface was returned, we'll ask the provider
-        // to validate the user against the given credentials, and if they are in
-        // fact valid we'll log the users into the application and return true.
         if ($this->hasValidCredentials($user, $credentials)) {
             if ($login) {
                 $this->setUser($user);
 
-                return JWTAuth::fromUser($user);
+                return $this->jwt->fromUser($user);
             }
 
             return true;
@@ -155,9 +150,10 @@ class JwtAuthGuard implements Guard
      */
     public function logout($forceForever = true)
     {
-        $this->user = null;
         $this->invalidate($forceForever);
-        JWTAuth::unsetToken();
+
+        $this->user = null;
+        $this->jwt->unsetToken();
     }
 
     /**
@@ -170,7 +166,7 @@ class JwtAuthGuard implements Guard
     public function generateTokenById($id)
     {
         if (!is_null($user = $this->provider->retrieveById($id))) {
-            return JWTAuth::fromUser($user);
+            return $this->jwt->fromUser($user);
         }
 
         return null;
@@ -183,9 +179,7 @@ class JwtAuthGuard implements Guard
      */
     public function refresh()
     {
-        $this->parseToken();
-
-        return JWTAuth::refresh();
+        return $this->requireToken()->refresh();
     }
 
     /**
@@ -197,21 +191,7 @@ class JwtAuthGuard implements Guard
      */
     public function invalidate($forceForever = false)
     {
-        $this->parseToken();
-
-        return JWTAuth::invalidate($forceForever);
-    }
-
-    /**
-     * Parse token from request if a token is not set.
-     */
-    protected function parseToken()
-    {
-        if (is_null($this->token)) {
-            $this->checkForToken();
-
-            JWTAuth::parseToken();
-        }
+        return $this->requireToken()->invalidate($forceForever);
     }
 
     /**
@@ -221,7 +201,7 @@ class JwtAuthGuard implements Guard
      */
     public function getToken()
     {
-        return JWTAuth::getToken();
+        return $this->jwt->getToken();
     }
 
     /**
@@ -233,9 +213,7 @@ class JwtAuthGuard implements Guard
      */
     public function setToken($token)
     {
-        $this->token = $token;
-
-        JWTAuth::setToken($token);
+        $this->jwt->setToken($token);
 
         return $this;
     }
@@ -247,7 +225,7 @@ class JwtAuthGuard implements Guard
      */
     public function getPayload()
     {
-        return JWTAuth::getPayload();
+        return $this->jwt->getPayload();
     }
 
     /**
@@ -261,6 +239,22 @@ class JwtAuthGuard implements Guard
     protected function hasValidCredentials($user, $credentials)
     {
         return !is_null($user) && $this->provider->validateCredentials($user, $credentials);
+    }
+
+    /**
+     * Ensure that a token is available in the request
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
+     *
+     * @return \Tymon\JWTAuth\JWTAuth
+     */
+    protected function requireToken()
+    {
+        if (!$this->getToken()) {
+            throw new BadRequestHttpException('Token could not be parsed from the request.');
+        }
+
+        return $this->jwt;
     }
 
     /**
@@ -298,23 +292,13 @@ class JwtAuthGuard implements Guard
      *
      * @param  \Illuminate\Contracts\Auth\UserProvider $provider
      *
-     * @return void
+     * @return $this
      */
     public function setProvider(UserProvider $provider)
     {
         $this->provider = $provider;
-    }
 
-    /**
-     * Check the request for the presence of a token
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
-     */
-    public function checkForToken()
-    {
-        if (!JWTAuth::parser()->setRequest($this->request)->hasToken()) {
-            throw new BadRequestHttpException('Token not provided');
-        }
+        return $this;
     }
 
     /**
