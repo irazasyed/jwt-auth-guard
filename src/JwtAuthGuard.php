@@ -37,9 +37,9 @@ class JwtAuthGuard implements Guard
     /**
      * Create a new authentication guard.
      *
-     * @param JWT                                      $jwt
-     * @param  \Illuminate\Contracts\Auth\UserProvider $provider
-     * @param \Illuminate\Http\Request                 $request
+     * @param \Tymon\JWTAuth\JWT                      $jwt
+     * @param \Illuminate\Contracts\Auth\UserProvider $provider
+     * @param \Illuminate\Http\Request                $request
      */
     public function __construct(JWT $jwt, UserProvider $provider, Request $request)
     {
