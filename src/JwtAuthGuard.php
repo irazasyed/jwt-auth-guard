@@ -2,7 +2,7 @@
 
 namespace Irazasyed\JwtAuthGuard;
 
-use Tymon\JWTAuth\JWT;
+use Tymon\JWTAuth\JWTAuth;
 use Illuminate\Http\Request;
 use Illuminate\Auth\GuardHelpers;
 use Illuminate\Contracts\Auth\Guard;
@@ -23,7 +23,7 @@ class JwtAuthGuard implements Guard
     /**
      * The JWT instance.
      *
-     * @var \Tymon\JWTAuth\JWT
+     * @var \Tymon\JWTAuth\JWTAuth
      */
     protected $jwt;
 
@@ -37,11 +37,11 @@ class JwtAuthGuard implements Guard
     /**
      * Create a new authentication guard.
      *
-     * @param \Tymon\JWTAuth\JWT                      $jwt
+     * @param \Tymon\JWTAuth\JWTAuth                  $jwt
      * @param \Illuminate\Contracts\Auth\UserProvider $provider
      * @param \Illuminate\Http\Request                $request
      */
-    public function __construct(JWT $jwt, UserProvider $provider, Request $request)
+    public function __construct(JWTAuth $jwt, UserProvider $provider, Request $request)
     {
         $this->jwt = $jwt;
         $this->provider = $provider;
