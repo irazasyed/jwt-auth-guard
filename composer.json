@@ -20,7 +20,7 @@
         "phpunit/phpunit" : "4.*",
         "scrutinizer/ocular": "~1.1",
         "squizlabs/php_codesniffer": "~2.3",
-        "tymon/jwt-auth": "0.6.*@dev"
+        "tymon/jwt-auth": "^1.0@dev"
     },
     "autoload": {
         "psr-4": {
