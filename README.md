@@ -10,7 +10,17 @@
 
 ## Requirements
 - Laravel or Lumen Installation.
-- [tymon/jwt-auth](https://github.com/tymondesigns/jwt-auth) Package Setup and Config'd.
+- [tymon/jwt-auth](https://github.com/tymondesigns/jwt-auth) `^1.0@dev` Package Setup and Config'd.
+
+## Pre-Installation
+
+First install and setup [tymon/jwt-auth](https://github.com/tymondesigns/jwt-auth) package.
+
+``` bash
+$ composer require tymon/jwt-auth:^1.0@dev
+```
+
+Once done, config it and then install this package.
 
 ## Install
 
@@ -234,7 +244,7 @@ $payload = Auth::setToken('TokenToGetPayload')->getPayload();
 
 ## Change log
 
-Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
+Please see [CHANGELOG](.github/CHANGELOG.md) for more information what has changed recently.
 
 ## Testing
 
@@ -244,7 +254,7 @@ $ composer test
 
 ## Contributing
 
-Please see [CONTRIBUTING](CONTRIBUTING.md) and [CONDUCT](CONDUCT.md) for details.
+Please see [CONTRIBUTING](.github/CONTRIBUTING.md) and [CONDUCT](.github/CONDUCT.md) for details.
 
 Any issues, feedback, suggestions or questions please use issue tracker [here](https://github.com/irazasyed/jwt-auth-guard/issues).
 
