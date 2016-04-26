@@ -2,12 +2,10 @@
 
 namespace Irazasyed\JwtAuthGuard;
 
-use Tymon\JWTAuth\JWT;
-use BadMethodCallException;
+use Tymon\JWTAuth\JWTAuth;
 use Illuminate\Http\Request;
 use Illuminate\Auth\GuardHelpers;
 use Illuminate\Contracts\Auth\Guard;
-use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Contracts\Auth\UserProvider;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -25,7 +23,7 @@ class JwtAuthGuard implements Guard
     /**
      * The JWT instance.
      *
-     * @var \Tymon\JWTAuth\JWT
+     * @var \Tymon\JWTAuth\JWTAuth
      */
     protected $jwt;
 
@@ -39,11 +37,11 @@ class JwtAuthGuard implements Guard
     /**
      * Create a new authentication guard.
      *
-     * @param \Tymon\JWTAuth\JWT                      $jwt
+     * @param \Tymon\JWTAuth\JWTAuth                  $jwt
      * @param \Illuminate\Contracts\Auth\UserProvider $provider
      * @param \Illuminate\Http\Request                $request
      */
-    public function __construct(JWT $jwt, UserProvider $provider, Request $request)
+    public function __construct(JWTAuth $jwt, UserProvider $provider, Request $request)
     {
         $this->jwt = $jwt;
         $this->provider = $provider;
@@ -61,11 +59,13 @@ class JwtAuthGuard implements Guard
             return $this->user;
         }
 
-        if ($this->jwt->getToken() && $this->jwt->check()) {
-            $id = $this->jwt->payload()->get('sub');
-
-            return $this->user = $this->provider->retrieveById($id);
+        if (! $this->jwt->getToken()) {
+            return null;
         }
+
+        $id = $this->jwt->getPayload()->get('sub');
+
+        return $this->user = $this->provider->retrieveById($id);
     }
 
     /**
@@ -95,40 +95,32 @@ class JwtAuthGuard implements Guard
      */
     public function validate(array $credentials = [])
     {
-        return $this->attempt($credentials, false);
+        return $this->attempt($credentials, [], false);
     }
 
     /**
      * Attempt to authenticate the user using the given credentials and return the token.
      *
      * @param array $credentials
-     * @param bool  $login
-     *
+     * @param array $customClaims
+     * @param bool $login
      * @return mixed
      */
-    public function attempt(array $credentials = [], $login = true)
+    public function attempt(array $credentials = [], $customClaims = [], $login = true)
     {
         $this->lastAttempted = $user = $this->provider->retrieveByCredentials($credentials);
 
         if ($this->hasValidCredentials($user, $credentials)) {
-            return $login ? $this->login($user) : true;
+            if ($login) {
+                $this->setUser($user);
+
+                return $this->jwt->fromUser($user, $customClaims);
+            }
+
+            return true;
         }
 
         return false;
-    }
-
-    /**
-     * Create a token for a user.
-     *
-     * @param  JWTSubject $user
-     *
-     * @return string
-     */
-    public function login(JWTSubject $user)
-    {
-        $this->setUser($user);
-
-        return $this->jwt->fromUser($user);
     }
 
     /**
@@ -169,12 +161,13 @@ class JwtAuthGuard implements Guard
      *
      * @param  mixed $id
      *
-     * @return string|null
+     * @param array $customClaims
+     * @return null|string
      */
-    public function generateTokenById($id)
+    public function generateTokenById($id, $customClaims = [])
     {
         if (!is_null($user = $this->provider->retrieveById($id))) {
-            return $this->jwt->fromUser($user);
+            return $this->jwt->fromUser($user, $customClaims);
         }
 
         return null;
@@ -254,7 +247,7 @@ class JwtAuthGuard implements Guard
      *
      * @throws \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
      *
-     * @return \Tymon\JWTAuth\JWT
+     * @return \Tymon\JWTAuth\JWTAuth
      */
     protected function requireToken()
     {
@@ -321,23 +314,5 @@ class JwtAuthGuard implements Guard
         $this->request = $request;
 
         return $this;
-    }
-
-    /**
-     * Magically call the JWT instance.
-     *
-     * @param  string $method
-     * @param  array  $parameters
-     *
-     * @return mixed
-     * @throws BadMethodCallException
-     */
-    public function __call($method, $parameters)
-    {
-        if (method_exists($this->jwt, $method)) {
-            return call_user_func_array([$this->jwt, $method], $parameters);
-        }
-
-        throw new BadMethodCallException("Method [$method] does not exist.");
     }
 }
