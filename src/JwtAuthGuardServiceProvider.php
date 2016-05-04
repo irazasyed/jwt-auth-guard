@@ -2,7 +2,6 @@
 
 namespace Irazasyed\JwtAuthGuard;
 
-use Irazasyed\JwtAuthGuard\JwtAuthGuard;
 use Illuminate\Support\ServiceProvider;
 
 class JwtAuthGuardServiceProvider extends ServiceProvider
