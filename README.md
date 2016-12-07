@@ -106,11 +106,13 @@ class ContentController extends Controller
 >
 > Example: `Auth::guard('api')->user()`
 
-### Attempt To Authenticate And Return Token
+### Attempt To Authenticate
 
 ``` php
 // This will attempt to authenticate the user using the credentials passed and returns a JWT Auth Token for subsequent requests.
-$token = Auth::attempt(['email' => 'user@domain.com', 'password' => '123456']);
+if(Auth::attempt(['email' => 'user@domain.com', 'password' => '123456'])) {
+//do some
+}
 ```
 
 ### Authenticate Once By ID

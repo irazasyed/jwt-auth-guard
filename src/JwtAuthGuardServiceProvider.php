@@ -25,7 +25,7 @@ class JwtAuthGuardServiceProvider extends ServiceProvider
     {
         $this->app['auth']->extend('jwt-auth', function ($app, $name, array $config) {
             $guard = new JwtAuthGuard(
-                $app['tymon.jwt'],
+                $app['tymon.jwt.auth'],
                 $app['auth']->createUserProvider($config['provider']),
                 $app['request']
             );

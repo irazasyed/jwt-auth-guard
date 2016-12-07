@@ -8,8 +8,7 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Tymon\JWTAuth\Contracts\JWTSubject;
-use Tymon\JWTAuth\JWT;
+use Tymon\JWTAuth\JWTAuth;
 
 class JwtAuthGuard implements Guard
 {
@@ -23,9 +22,9 @@ class JwtAuthGuard implements Guard
     protected $lastAttempted;
 
     /**
-     * The JWT instance.
+     * The JWTAuth instance.
      *
-     * @var \Tymon\JWTAuth\JWT
+     * @var \Tymon\JWTAuth\JWTAuth
      */
     protected $jwt;
 
@@ -39,11 +38,11 @@ class JwtAuthGuard implements Guard
     /**
      * Create a new authentication guard.
      *
-     * @param \Tymon\JWTAuth\JWT                      $jwt
+     * @param \Tymon\JWTAuth\JWTAuth                      $jwt
      * @param \Illuminate\Contracts\Auth\UserProvider $provider
      * @param \Illuminate\Http\Request                $request
      */
-    public function __construct(JWT $jwt, UserProvider $provider, Request $request)
+    public function __construct(JWTAuth $jwt, UserProvider $provider, Request $request)
     {
         $this->jwt = $jwt;
         $this->provider = $provider;
@@ -120,11 +119,11 @@ class JwtAuthGuard implements Guard
     /**
      * Create a token for a user.
      *
-     * @param JWTSubject $user
+     * @param $user
      *
      * @return string
      */
-    public function login(JWTSubject $user)
+    public function login($user)
     {
         $this->setUser($user);
 
@@ -252,7 +251,7 @@ class JwtAuthGuard implements Guard
      *
      * @throws \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
      *
-     * @return \Tymon\JWTAuth\JWT
+     * @return \Tymon\JWTAuth\JWTAuth
      */
     protected function requireToken()
     {
@@ -322,7 +321,7 @@ class JwtAuthGuard implements Guard
     }
 
     /**
-     * Magically call the JWT instance.
+     * Magically call the JWTAuth instance.
      *
      * @param string $method
      * @param array  $parameters
