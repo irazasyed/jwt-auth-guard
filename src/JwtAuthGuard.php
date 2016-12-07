@@ -60,8 +60,8 @@ class JwtAuthGuard implements Guard
             return $this->user;
         }
 
-        if ($this->jwt->getToken() && $this->jwt->check()) {
-            $id = $this->jwt->payload()->get('sub');
+        if ($this->jwt->getToken()) {
+            $id = $this->jwt->getPayload()->get('sub');
 
             return $this->user = $this->provider->retrieveById($id);
         }
@@ -160,7 +160,6 @@ class JwtAuthGuard implements Guard
         $this->invalidate($forceForever);
 
         $this->user = null;
-        $this->jwt->unsetToken();
     }
 
     /**
@@ -202,7 +201,7 @@ class JwtAuthGuard implements Guard
     /**
      * Get the token.
      *
-     * @return false|Token
+     * @return false|string
      */
     public function getToken()
     {
@@ -212,9 +211,9 @@ class JwtAuthGuard implements Guard
     /**
      * Set the token.
      *
-     * @param Token|string $token
+     * @param  string $token
      *
-     * @return JwtGuard
+     * @return JwtAuthGuard
      */
     public function setToken($token)
     {
