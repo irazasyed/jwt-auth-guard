@@ -1,5 +1,8 @@
 # JWT Auth Guard
 
+[![Join PHP Chat][ico-phpchat]][link-phpchat]
+[![Chat on Telegram][ico-telegram]][link-telegram]
+[![Laravel Package][ico-laravel]][link-repo]
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](LICENSE.md)
 [![Total Downloads][ico-downloads]][link-downloads]
@@ -272,13 +275,19 @@ If you discover any security related issues, please email syed+gh@lukonet.com in
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
 
+[ico-phpchat]: https://img.shields.io/badge/Slack-PHP%20Chat-5c6aaa.svg?style=flat-square&logo=slack&labelColor=4A154B
+[ico-telegram]: https://img.shields.io/badge/@PHPChatCo-2CA5E0.svg?style=flat-square&logo=telegram&label=Telegram
 [ico-version]: https://img.shields.io/packagist/v/irazasyed/jwt-auth-guard.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
 [ico-travis]: https://img.shields.io/travis/irazasyed/jwt-auth-guard/master.svg?style=flat-square
 [ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/irazasyed/jwt-auth-guard.svg?style=flat-square
 [ico-code-quality]: https://img.shields.io/scrutinizer/g/irazasyed/jwt-auth-guard.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/irazasyed/jwt-auth-guard.svg?style=flat-square
+[ico-laravel]: https://img.shields.io/badge/Laravel-5|6-FF2D20.svg?style=flat-square&logo=laravel&labelColor=black&logoColor=white
 
+[link-phpchat]: https://phpchat.co/?ref=jwt-auth-guard
+[link-telegram]: https://t.me/PHPChatCo
+[link-repo]: https://github.com/irazasyed/jwt-auth-guard
 [link-packagist]: https://packagist.org/packages/irazasyed/jwt-auth-guard
 [link-travis]: https://travis-ci.org/irazasyed/jwt-auth-guard
 [link-scrutinizer]: https://scrutinizer-ci.com/g/irazasyed/jwt-auth-guard/code-structure
